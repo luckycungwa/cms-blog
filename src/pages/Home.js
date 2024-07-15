@@ -3,6 +3,8 @@ import HeroCarousel from "../components/HeroCarousel";
 import FeaturedPosts from "../components/FeaturedPosts";
 import RecentPosts from "../components/RecentPostsGrid";
 import Hero from "../components/Hero";
+import SuggestedPosts from "../components/SuggestedPosts";
+import SubscriptionSection from "../components/SubscriptionSection";
 
 const Home = () => {
   return (
@@ -16,7 +18,12 @@ const Home = () => {
         </div>
         <FeaturedPosts />
         <RecentPosts />
+        <div className="  md:px-32">
+        <SuggestedPosts />  
+        </div>
+        
       </div>
+      <SubscriptionSection/>
     </div>
   );
 };

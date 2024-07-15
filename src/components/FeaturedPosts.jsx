@@ -5,12 +5,12 @@ import { FiArrowUpRight } from "react-icons/fi";
 
 const FeaturedPosts = () => {
   const handleViewBlog = () => {
-    window.location.href = "/blog";
+    window.location.href = "/post";
   };
 
   return (
-    <div className="py-4 flex-col gap-2 lg:px-32">
-      <div className="flex flex-col gap-2 justify-center px-5">
+    <div className="py-4 flex-col gap-2 md:px-32">
+      <div className="flex flex-col gap-2 justify-center">
         <h1 className="text-md flex font-bold justify-between justify-center items-end">
           Featured Posts{" "}
           <span

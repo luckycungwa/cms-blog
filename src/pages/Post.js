@@ -29,12 +29,12 @@ const Post = () => {
         </div>
 
         {/* post content */}
-        <div className="grid grid-cols-12 flex flex-col text-start my-16 px-5 lg:px-16 justify-between flex-col gap-16">
+        <div className="md:grid md:grid-cols-12 flex flex-col text-start mt-16 px-5 lg:px-16 justify-between flex-col gap-16">
           <div className=" w-auto mb-8 flex flex-col w-1/2 lg:w-full col-span-12 md:col-span-8">
-            <p className="text-2xl font-bold mb-4">
+            <p className="text-xl font-bold my-4">
               Post Title: In the beginning
             </p>
-            <p className="text-normal ">
+            <p className="text-sm ">
               As a remote worker, staying focused and productive can be a
               challenge. With the absence of a traditional office environment,
               it's easy to get distracted and lose track of tasks. However, with
@@ -94,9 +94,9 @@ const Post = () => {
             <CommentSection />
           </div>
 
-          <div className="mb-8 flex flex-col col-span-12 lg:col-span-4">
-           
-           <SuggestedPosts />
+          <div className="mb-8 w-auto flex flex-col col-span-12 lg:col-span-4">
+            <SuggestedPosts />
+            <Divider />
           </div>
         </div>
         <FeaturedPosts />

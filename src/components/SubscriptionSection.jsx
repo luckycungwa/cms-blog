@@ -4,7 +4,7 @@ import { FiMail } from "react-icons/fi";
 
 const SubscriptionSection = () => {
   return (
-    <div className="flex justify-between bg-gray-100 py-4 px-4 lg:px-8 items-center mb-16">
+    <div className="flex justify-between bg-gray-100 py-6 px-4 items-center mb-16 ">
       <div className="flex flex-col gap-4 w-full h-auto justify-center">
         <p className="lg:text-3xl text-lg font-bold capitalize">
           Subscribe To Our Newsletter
@@ -29,8 +29,8 @@ const SubscriptionSection = () => {
           <Button className="w-full lg:w-auto">Subscribe</Button>
         </div>
         <p className="text-xs">
-          By sucribing you aggre to our{" "}
-          <span className="text-blue-500">terms of service</span>
+          By subscribing you agree to our {" "}
+          <span className="text-blue-500"> terms of service</span>
         </p>
       </div>
 

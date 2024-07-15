@@ -44,7 +44,7 @@ const FollowUs = () => {
                 {socialLinks.map((link) => (
                     <div key={link.id} className="flex gap-2 items-center">
                     <Button
-                    size="md"
+                    size="sm"
                     isIconOnly
                     color="default"
                     variant="faded"
