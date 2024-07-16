@@ -9,21 +9,22 @@ import {
   Image,
 } from "@nextui-org/react";
 
-const PostCard2 = () => {
+const PostCard2 = ({post}) => {
+
   return (
     <>
-      <Card className="w-full">
+      <Card isPressable as={Link} to={`/post/${post.id}`} className="w-full">
         <CardBody className="flex gap-4 flex-row">
           <Image
-            alt="nextui logo"
+            alt={post.image.alt}
             height={100}
             radius="sm"
-            src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+            src={post.image?.url || 'https://nextui.org/images/hero-card-complete.jpeg'}
             width={100}
           />
           <div className="flex flex-col gap-2">
-            <p className="text-md font-bold truncate-text2">Replace: Fetch title of the post from cms api </p>
-            <p className="text-xs text-default-500 trancate-text">01 August 2024</p>
+            <p className="text-md font-bold truncate-text2">{post.title} </p>
+            <p className="text-xs text-default-500 trancate-text">{new Date(post.publishedDate).toLocaleDateString()}</p>
           </div>
         </CardBody>
       </Card>

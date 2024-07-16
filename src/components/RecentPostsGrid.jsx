@@ -1,11 +1,26 @@
+import React, { useState, useEffect } from "react";
+import { getPosts } from "../services/api";
 import { Button, Divider } from "@nextui-org/react";
-import React from "react";
 import { FiArrowUpRight } from "react-icons/fi";
 import PostCard from "./PostCard";
 
 const RecentPosts = () => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const fetchedPosts = await getPosts({ limit: 9, sort: '-publishedDate' });
+        setPosts(fetchedPosts.docs);
+      } catch (error) {
+        console.error("Error fetching recent posts:", error);
+      }
+    };
+    fetchPosts();
+  }, []);
+
   const handleViewBlog = () => {
-    window.location.href = "/post";
+    window.location.href = "/blog";
   };
 
   return (
@@ -24,15 +39,9 @@ const RecentPosts = () => {
       </div>
       {/* grid card display here */}
       <div className="flex flex-row gap-4 flex-wrap py-4 justify-center items-center">
-        <PostCard />
-        <PostCard />
-        <PostCard />
-        <PostCard />
-        <PostCard />
-        <PostCard />
-        <PostCard />
-        <PostCard />
-        <PostCard />
+      {posts.map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
       </div>
 
       <div className="flex justify-center">

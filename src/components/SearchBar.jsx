@@ -1,19 +1,28 @@
+import React, { useState, useEffect } from "react";
+import { searchPosts } from "../services/api";
 import { Button, Input } from '@nextui-org/react';
-import React from 'react';
 import { FiSearch } from 'react-icons/fi';
 
 const SearchBar = () => {
-  const handleSearch = () => {
-    console.log('searching');
-    
-  }
+  const [searchTerm, setSearchTerm] = useState('');
+  const [results, setResults] = useState([]);
 
+  const handleSearch = async () => {
+    try {
+      const searchResults = await searchPosts(searchTerm);
+      setResults(searchResults);
+      // Handle displaying results (e.g., update state in a parent component)
+    } catch (error) {
+      console.error("Error searching posts:", error);
+    }
+  };
 
     return (
-        <div className='mb-4 w-full lg:w-auto flex gap-2'>
+        <div className='mb-4 w-full md:w-auto flex gap-2'>
             
       <Input
-        // label="Search"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
         isClearable
         radius="lg"
         classNames={{

@@ -1,13 +1,22 @@
-import React from "react";
-import PostCard from "./PostCard";
+import React, { useState, useEffect } from "react";
 import { Divider } from "@nextui-org/react";
-import { FiArrowUpRight } from "react-icons/fi";
 import PostCard2 from "./PostCard2";
+import {getPosts} from "../services/api"
 
 const SuggestedPosts = () => {
-  const handleViewBlog = () => {
-    window.location.href = "/post";
-  };
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const fetchedPosts = await getPosts({ limit: 4 }); // Adjust limit as needed
+        setPosts(fetchedPosts.docs);
+      } catch (error) {
+        console.error("Error fetching suggested posts:", error);
+      }
+    };
+    fetchPosts();
+  }, []);
 
   return (
     <div className="py-4 flex-col gap-2 w-auto ">
@@ -19,10 +28,9 @@ const SuggestedPosts = () => {
       </div>
       {/* grid card display here */}
       <div className="flex flex-row gap-2 flex-wrap py-4 justify-center items-center">
-        <PostCard2 />
-        <PostCard2 />
-        <PostCard2 />
-        <PostCard2 />
+      {posts.map((post) => (
+          <PostCard2 key={post.id} post={post} />
+        ))}
       </div>
     </div>
   );

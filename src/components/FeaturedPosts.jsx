@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { getPosts } from "../services/api";
 import PostCard from "./PostCard";
 import { Divider } from "@nextui-org/react";
 import { FiArrowUpRight } from "react-icons/fi";
 
 const FeaturedPosts = () => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const fetchedPosts = await getPosts({ limit: 4, where: { featured: true } });
+        setPosts(fetchedPosts.docs);
+      } catch (error) {
+        console.error("Error fetching featured posts:", error);
+      }
+    };
+    fetchPosts();
+  }, []);
+
   const handleViewBlog = () => {
     window.location.href = "/post";
   };
@@ -24,10 +39,9 @@ const FeaturedPosts = () => {
       </div>
       {/* grid card display here */}
       <div className="flex flex-row gap-4 flex-wrap py-4 justify-center items-center">
-        <PostCard />
-        <PostCard />
-        <PostCard />
-        <PostCard />
+        {posts.map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
       </div>
     </div>
   );

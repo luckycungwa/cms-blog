@@ -1,45 +1,35 @@
+import React, { useState, useEffect } from "react";
 import { Chip } from '@nextui-org/react';
-import React from 'react';
+import { getCategories } from '../services/api';
 
 const CategoryFilter = () => {
-    const Categories = [
-       
-        {
-            id: 1,
-            name: "All"
-        },
-        {
-            id: 2,
-            name: "Productivity"
-        },
-        {
-            id: 3,
-            name: "Branding & Aesthetics"
-        },
-        {
-            id: 4,
-            name: "Entertainment"
-        },
-        {
-            id: 5,
-            name: "General"
-        },
-        {
-            id: 6,
-            name: "Other"
-        },
-    ]
+    const [categories, setCategories] = useState([]);
 
-    const handleFilter = () => {
-        console.log("filtered by:" );
-    }
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const fetchedCategories = await getCategories();
+                setCategories([{ id: 'all', name: 'All' }, ...fetchedCategories.docs]);
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            }
+        };
+        fetchCategories();
+    }, []);
+    
+    const handleFilter = (categoryId) => {
+        console.log("Filtered by:", categoryId);
+        // Implement filtering logic here
+    };
     
     return (
         <>
             <div className='flex gap-2 flex-wrap justify-center font-light text-sm'>
-                {Categories.map((category) => (
-                    <Chip key={category.id} color="default" variant="bordered" size='md' onClick={handleFilter}>{category.name}</Chip>
-                ))}
+                {categories.map((category) => (
+                <Chip key={category.id} color="default" variant="bordered" size='sm' onClick={() => handleFilter(category.id)} className="!cursor-pointer">
+                    {category.name}
+                </Chip>
+            ))}
             </div>
         </>
     );

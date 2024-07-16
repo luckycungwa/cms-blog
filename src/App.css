@@ -1,3 +1,8 @@
+::selection {
+  background: rgb(45, 255, 104);
+
+}
+
 .hero-carousel {
     position: relative;
     width: 100%;
@@ -115,3 +120,5 @@
     width: auto;
     line-height: normal;
   }
+
+
