@@ -20,7 +20,7 @@ const FeaturedPosts = () => {
   }, []);
 
   const handleViewBlog = () => {
-    window.location.href = "/post";
+    window.location.href = "/blog";
   };
 
   return (

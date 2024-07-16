@@ -9,7 +9,7 @@ const SuggestedPosts = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const fetchedPosts = await getPosts({ limit: 4 }); // Adjust limit as needed
+        const fetchedPosts = await getPosts({ limit: 4, where: { featured: true } });
         setPosts(fetchedPosts.docs);
       } catch (error) {
         console.error("Error fetching suggested posts:", error);

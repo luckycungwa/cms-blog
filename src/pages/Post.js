@@ -1,14 +1,57 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getPost } from "../services/api";
-import { Divider, Image, Button, Badge } from "@nextui-org/react";
+import { Divider, Button, Badge } from "@nextui-org/react";
 import { FiHeart, FiShare } from "react-icons/fi";
 import { BsChat } from "react-icons/bs";
 
 import FeaturedPosts from "../components/FeaturedPosts";
-import SearchBar from "../components/SearchBar";
 import SuggestedPosts from "../components/SuggestedPosts";
 import CommentSection from "../components/CommentSection";
+
+// Recursive function to render content based on its type and properties
+const renderContent = (content) => {
+  return content.map((block, index) => {
+    const children = block.children.map((child, childIndex) => {
+      let childContent = child.text;
+
+      // Apply inline formatting
+      if (child.bold) {
+        childContent = <strong key={childIndex}>{childContent}</strong>;
+      }
+      if (child.italic) {
+        childContent = <em key={childIndex}>{childContent}</em>;
+      }
+      if (child.underline) {
+        childContent = <u key={childIndex}>{childContent}</u>;
+      }
+
+      return childContent;
+    });
+
+    // Handle block elements
+    switch (block.type) {
+      case "h3":
+        return <h3 key={index}>{children}</h3>;
+      case "h4":
+        return <h4 key={index}>{children}</h4>;
+      case "h5":
+        return <h5 key={index}>{children}</h5>;
+      case "ul":
+        return (
+          <ul key={index}>
+            {block.children.map((li, liIndex) => (
+              <li key={liIndex}>{renderContent([li])}</li>
+            ))}
+          </ul>
+        );
+      case "li":
+        return <li key={index}>{children}</li>;
+      default:
+        return <p key={index}>{children}</p>;
+    }
+  });
+};
 
 const Post = () => {
   const [post, setPost] = useState(null);
@@ -55,16 +98,8 @@ const Post = () => {
         {/* post content */}
         <div className="md:grid md:grid-cols-12 flex flex-col text-start mt-16 px-5 lg:px-16 justify-between flex-col gap-16">
           <div className=" w-auto mb-8 flex flex-col w-1/2 lg:w-full col-span-12 md:col-span-8">
-            <p className="text-xl font-bold my-4">
-              {post.title}
-            </p>
-            <p className="text-sm ">
-            {Array.isArray(post.content) ? post.content.map((block, index) => (
-            <p key={index} className="py-2">{block.children.map(child => child.text).join(' ')}</p>
-          )) : <p>Invalid content format</p>}
-             {/* {post.content} */}
-             {/* <div dangerouslySetInnerHTML={{ __html: post.content }} /> */}
-            </p>
+            <p className="text-xl font-bold my-4">{post.title}</p>
+            <div className="text-sm">{renderContent(post.content)}</div>
 
             <div className="flex justify-between items-center mt-8">
               <p>Written by: {post.author || "Anonymous"}</p>

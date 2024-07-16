@@ -3,9 +3,12 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:3001/api';  // Updated to match backend port
 
-export const getPosts = async () => {
+// get all post but use pagination to load posts by sets (for optimization nton nton)
+export const getPosts = async (page = 1) => {
   try {
-    const response = await axios.get(`${API_URL}/posts`);
+    const response = await axios.get(`${API_URL}/posts`, {
+      params: { page },
+    });
     return response.data;
   } catch (error) {
     console.error('Error fetching posts:', error);

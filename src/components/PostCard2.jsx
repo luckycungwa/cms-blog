@@ -17,7 +17,7 @@ const PostCard2 = ({post}) => {
 
   return (
     <>
-     <Card isPressable className="py-1 max-w-[320px] min-w-[320px] max-h-[120px] min-h-[120px]" onClick={handleReadPost}>
+     <Card isPressable className="py-1 max-w-[340px] min-w-[320px] max-h-[120px] min-h-[120px]" onClick={handleReadPost}>
         <CardBody className="flex gap-4 flex-row">
           <img
             alt={post.image.alt}
