@@ -6,18 +6,9 @@ const PostCard = ({ post }) => {
     return null;
   }
 
-  const TruncateText = ({ text, lines }) => {
-    const truncatedText = text.split('\n').slice(0, lines).join('\n');
-    return (
-      <>
-        {truncatedText}
-        {text.split('\n').length > lines ? '...' : ''}
-      </>
-    );
-  };
   // navigate to Post with card data
   const handleReadPost = () => {
-    window.location.href = "/blog";
+    window.location.href = `/post/${post.id}`;
   };
 
   return (
@@ -25,6 +16,8 @@ const PostCard = ({ post }) => {
       <Card isPressable className="py-1 max-w-[320px] min-w-[320px] max-h-[420px] min-h-[420px]" onClick={handleReadPost}>
         <CardBody className="overflow-visible py-2">
           <Image
+            objectFit="cover"
+            // height={100}
             alt={post.image.alt}
             className="object-cover rounded-xl"
             src={post.image.url || 'https://nextui.org/images/hero-card-complete.jpeg'}
@@ -37,7 +30,7 @@ const PostCard = ({ post }) => {
 
           <p className="text-default-500 truncate-text mb-2">{post.briefDescription}</p>
           <div className="flex justify-between w-full items-center pt-2">
-            <small className="text-default-500">{new Date(post.publishedDate).toLocaleDateString()}</small>
+            <small className="text-xs font-light text-default-500">{new Date(post.publishedDate).toLocaleDateString()}</small>
             <small className="text-default-500">
               <Chip size="sm" color="default" className="px-2">
               {post.category?.name || 'Uncategorized'}

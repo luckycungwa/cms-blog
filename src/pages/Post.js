@@ -39,7 +39,7 @@ const Post = () => {
         <div className="post-hero flex justify-center items-end ">
           {/* post image */}
           <img
-            src={post.image.url}
+            src={post.image?.url || "no image"}
             alt={post.image.alt}
             className="w-full object-cover post-hero-img"
           />
@@ -59,7 +59,11 @@ const Post = () => {
               {post.title}
             </p>
             <p className="text-sm ">
-             {post.content}
+            {Array.isArray(post.content) ? post.content.map((block, index) => (
+            <p key={index} className="py-2">{block.children.map(child => child.text).join(' ')}</p>
+          )) : <p>Invalid content format</p>}
+             {/* {post.content} */}
+             {/* <div dangerouslySetInnerHTML={{ __html: post.content }} /> */}
             </p>
 
             <div className="flex justify-between items-center mt-8">

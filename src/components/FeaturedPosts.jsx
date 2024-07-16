@@ -24,7 +24,7 @@ const FeaturedPosts = () => {
   };
 
   return (
-    <div className="py-4 flex-col gap-2 md:px-32">
+    <div className="py-4 flex-col gap-2 md:px-32 px-5">
       <div className="flex flex-col gap-2 justify-center">
         <h1 className="text-md flex font-bold justify-between justify-center items-end">
           Featured Posts{" "}
@@ -39,6 +39,9 @@ const FeaturedPosts = () => {
       </div>
       {/* grid card display here */}
       <div className="flex flex-row gap-4 flex-wrap py-4 justify-center items-center">
+        {posts.map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
         {posts.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}

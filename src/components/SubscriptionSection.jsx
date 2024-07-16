@@ -4,8 +4,8 @@ import { FiMail } from "react-icons/fi";
 
 const SubscriptionSection = () => {
   return (
-    <div className="flex justify-between bg-gray-100 py-6 px-4 items-center mb-16 ">
-      <div className="flex flex-col gap-4 w-full h-auto justify-center">
+    <div className="flex justify-between bg-gray-100 py-6 items-center mb-8 ">
+      <div className="flex flex-col gap-4 w-full h-auto justify-center px-5">
         <p className="lg:text-3xl text-lg font-bold capitalize">
           Subscribe To Our Newsletter
         </p>

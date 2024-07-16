@@ -19,7 +19,7 @@ const SuggestedPosts = () => {
   }, []);
 
   return (
-    <div className="py-4 flex-col gap-2 w-auto ">
+    <div className="py-4 flex-col gap-2 w-auto px-5">
       <div className="flex flex-col gap-2 justify-center ">
         <h1 className="text-md flex font-bold justify-between justify-center items-end">
           Suggested Posts{" "}
