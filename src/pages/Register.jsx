@@ -1,27 +1,39 @@
-// src/pages/Register.jsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { register } from '../services/auth-service';
-import { Button, Card, CardBody, Divider, Input, Link } from '@nextui-org/react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { register } from "../services/auth-service";
+import {
+  Button,
+  Card,
+  CardBody,
+  Divider,
+  Input,
+  Link,
+} from "@nextui-org/react";
+import { Slide, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
+  const notify = () => toast.success(<p className="text-sm">Registration Successful</p>);
 
   const handleRegister = async (e) => {
     e.preventDefault();
     if (!username || !email || !password) {
-      setError('All fields are required.');
+      setError("All fields are required.");
       return;
     }
     try {
       await register(email, password, username);
+      
+      notify();
       navigate('/');
     } catch (error) {
-      setError('Error registering. Please try again.');
+      setError("Error registering. Please try again.");
     }
   };
 
@@ -55,13 +67,27 @@ const Register = () => {
             Sign Up
           </Button>
           <p className="text-sm text-center">
-            Already have an account?{' '}
+            Already have an account?{" "}
             <Link href="/login" color="primary">
               Login
             </Link>
           </p>
         </CardBody>
       </Card>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        limit={1}
+          transition={Slide}
+      />
     </div>
   );
 };

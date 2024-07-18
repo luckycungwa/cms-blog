@@ -12,16 +12,21 @@ import {
 import { BsFillReplyAllFill } from "react-icons/bs";
 import { FiArrowRight } from "react-icons/fi";
 import { commentOnPost, getComments } from "../services/interactionService";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { Slide, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CommentSection = ({ user, comments, setComments }) => {
   const [newComment, setNewComment] = useState("");
   const { id } = useParams();
-  const navigate = useNavigate();
+
+  const notify = () => {
+    toast.warning(<p className="text-sm">Please login to comment on this post</p>);
+  };
 
   const handleSubmitComment = async () => {
     if (!user) {
-      navigate("/login");
+      notify();
       return;
     }
 
@@ -42,6 +47,21 @@ const CommentSection = ({ user, comments, setComments }) => {
   return (
     <>
       <div className="my-8 w-auto flex flex-col">
+        <ToastContainer
+          stacked
+          position="top-center"
+          autoClose={4000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          limit={3}
+          transition={Slide}
+        />
         <p className="text-xl font-bold mb-2">Comments</p>
         <Textarea
           value={newComment}

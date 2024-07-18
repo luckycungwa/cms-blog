@@ -10,10 +10,12 @@ import {
   Link,
   Button,
   Divider,
+  Avatar,
 } from "@nextui-org/react";
 import { FiArrowRight } from "react-icons/fi";
 import FollowUs from "./FollowUs";
 import { logout } from "../services/auth-service";
+import UserProfile from "./UserProfile";
 
 const Navigationbar = ({ user }) => {
   const menuItems = [
@@ -75,7 +77,7 @@ const Navigationbar = ({ user }) => {
         {user ? (
           <>
             <NavbarItem className="hidden lg:flex">
-              <Link href="/profile">Profile</Link>
+              <UserProfile user={user} />
             </NavbarItem>
             <NavbarItem className="hidden lg:flex">
               <Link href="#" onClick={handleLogout}>Logout</Link>

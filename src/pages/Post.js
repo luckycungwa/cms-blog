@@ -6,6 +6,8 @@ import { getComments, likePost } from "../services/interactionService";
 import { Divider, Button, Badge } from "@nextui-org/react";
 import { FiHeart, FiShare } from "react-icons/fi";
 import { BsChat } from "react-icons/bs";
+import { Slide, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import FeaturedPosts from "../components/FeaturedPosts";
 import SuggestedPosts from "../components/SuggestedPosts";
@@ -64,6 +66,10 @@ const Post = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
+  // notification for unauthorized user
+  const notify = () =>
+    toast.warning(<p className="text-sm">Please login to save this post</p>);
+
   useEffect(() => {
     const fetchPost = async () => {
       try {
@@ -102,7 +108,8 @@ const Post = () => {
 
   const handleLike = async () => {
     if (!user) {
-      navigate('/login');
+      notify();
+      // navigate('/login');
       return;
     }
 
@@ -110,22 +117,23 @@ const Post = () => {
       await likePost(id);
       setLikes(likes + 1);
     } catch (error) {
-      console.error('Error liking post:', error);
+      console.error("Error liking post:", error);
     }
   };
 
   const handleShare = () => {
     if (navigator.share) {
-      navigator.share({
-        title: post.title,
-        text: post.briefDescription,
-        url: window.location.href,
-      })
-      .then(() => console.log('Post shared successfully'))
-      .catch((error) => console.error('Error sharing post:', error));
+      navigator
+        .share({
+          title: post.title,
+          text: post.briefDescription,
+          url: window.location.href,
+        })
+        .then(() => console.log("Post shared successfully"))
+        .catch((error) => console.error("Error sharing post:", error));
     } else {
       // Fallback sharing method
-      alert('Sharing is not supported on this browser.');
+      alert("Sharing is not supported on this browser.");
     }
   };
 
@@ -153,6 +161,21 @@ const Post = () => {
 
         {/* post content */}
         <div className="md:grid md:grid-cols-12 flex flex-col text-start mt-16 px-5 lg:px-16 justify-between flex-col gap-16">
+        <ToastContainer
+          stacked
+          position="top-center"
+          autoClose={4000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          limit={3}
+          transition={Slide}
+        />
           <div className=" w-auto mb-8 flex flex-col w-1/2 lg:w-full col-span-12 md:col-span-8">
             <p className="text-xl font-bold my-4">{post.title}</p>
             <div className="text-sm">{renderContent(post.content)}</div>
@@ -201,7 +224,11 @@ const Post = () => {
 
             <Divider />
             {/* comment section */}
-            <CommentSection user={user} comments={comments} setComments={setComments} />
+            <CommentSection
+              user={user}
+              comments={comments}
+              setComments={setComments}
+            />
           </div>
 
           <div className="mb-8 w-auto flex flex-col col-span-12 lg:col-span-4">

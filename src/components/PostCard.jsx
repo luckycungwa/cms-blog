@@ -15,7 +15,6 @@ const PostCard = ({ post }) => {
       <Card isPressable className="py-1 max-w-[340px] min-w-[320px] max-h-[450px] min-h-[420px]" onClick={handleReadPost}>
         <CardBody className="overflow-visible py-2">
           <Image
-            objectFit="cover"
             alt={post.image?.alt || 'Post image'}
             className="object-cover rounded-xl"
             src={post.image?.url || 'https://nextui.org/images/hero-card-complete.jpeg'}
