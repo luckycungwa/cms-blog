@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getPost } from "../services/api";
+import { getCurrentUser } from "../services/auth-service";
+import { getComments, likePost } from "../services/interactionService";
 import { Divider, Button, Badge } from "@nextui-org/react";
 import { FiHeart, FiShare } from "react-icons/fi";
 import { BsChat } from "react-icons/bs";
@@ -56,13 +58,18 @@ const renderContent = (content) => {
 const Post = () => {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [likes, setLikes] = useState(0);
+  const [comments, setComments] = useState([]);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const data = await getPost(id);
         setPost(data);
+        setLikes(data.likes || 0);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching post:", error);
@@ -70,8 +77,57 @@ const Post = () => {
       }
     };
 
+    const fetchCurrentUser = async () => {
+      try {
+        const user = await getCurrentUser();
+        setUser(user);
+      } catch (error) {
+        console.error("Error fetching current user:", error);
+      }
+    };
+
+    const fetchComments = async () => {
+      try {
+        const data = await getComments(id);
+        setComments(data);
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+      }
+    };
+
     fetchPost();
+    fetchCurrentUser();
+    fetchComments();
   }, [id]);
+
+  const handleLike = async () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      await likePost(id);
+      setLikes(likes + 1);
+    } catch (error) {
+      console.error('Error liking post:', error);
+    }
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: post.title,
+        text: post.briefDescription,
+        url: window.location.href,
+      })
+      .then(() => console.log('Post shared successfully'))
+      .catch((error) => console.error('Error sharing post:', error));
+    } else {
+      // Fallback sharing method
+      alert('Sharing is not supported on this browser.');
+    }
+  };
 
   if (loading) return <div>Loading...</div>;
   if (!post) return <div>Post not found</div>;
@@ -103,20 +159,22 @@ const Post = () => {
 
             <div className="flex justify-between items-center mt-8">
               <p>Written by: {post.author || "Anonymous"}</p>
+              {/* like, comment, and share buttons */}
               <div className="flex gap-4 items-center my-4">
-                <Badge color="secondary" content="12">
+                <Badge color="secondary" content={likes}>
                   <Button
                     size="sm"
                     isIconOnly
                     color="default"
                     variant="faded"
                     aria-label="Likes"
+                    onClick={handleLike}
                   >
                     <FiHeart size={16} />
                   </Button>
                 </Badge>
 
-                <Badge color="secondary" content="4">
+                <Badge color="secondary" content={comments.length}>
                   <Button
                     size="sm"
                     isIconOnly
@@ -134,6 +192,7 @@ const Post = () => {
                   color="default"
                   variant="faded"
                   aria-label="share post"
+                  onClick={handleShare}
                 >
                   <FiShare size={16} />
                 </Button>
@@ -141,7 +200,8 @@ const Post = () => {
             </div>
 
             <Divider />
-            <CommentSection />
+            {/* comment section */}
+            <CommentSection user={user} comments={comments} setComments={setComments} />
           </div>
 
           <div className="mb-8 w-auto flex flex-col col-span-12 lg:col-span-4">

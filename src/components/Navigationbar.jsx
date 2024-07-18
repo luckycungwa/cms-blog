@@ -1,89 +1,128 @@
-import React from 'react';
+import React from "react";
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarMenuToggle,
+  NavbarMenu,
+  NavbarMenuItem,
+  NavbarContent,
+  NavbarItem,
+  Link,
+  Button,
+  Divider,
+} from "@nextui-org/react";
+import { FiArrowRight } from "react-icons/fi";
+import FollowUs from "./FollowUs";
+import { logout } from "../services/auth-service";
 
-import {Navbar, NavbarBrand, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, NavbarContent, NavbarItem, Link, Button, Divider} from "@nextui-org/react";
-import { FiArrowRight } from 'react-icons/fi';
-import FollowUs from './FollowUs';
+const Navigationbar = ({ user }) => {
+  const menuItems = [
+    "Home",
+    "Blog",
+    "About Us",
+    "Contact Us",
+    "Help & Feedback",
+    "Log Out",
+  ];
 
+  const handleLogout = async () => {
+    await logout();
+    window.location.reload();
+  };
 
-const Navigationbar = () => {
-    const menuItems = [
-        "Home",
-        "Blog",
-        "About Us",
-        "Contct US",
-        "Help & Feedback",
-        "Log Out",
-      ];
-    
-      return (
-        <Navbar isBordered variant="sticky flex  flex-row lg:justify-between">
-          <NavbarContent className="sm:hidden" justify="start">
-            <NavbarMenuToggle />
-          </NavbarContent>
-    
-          <NavbarContent className="sm:hidden pr-3" justify="center">
-            <NavbarBrand>
-              <p className="font-bold text-inherit">HMO</p>
-            </NavbarBrand>
-          </NavbarContent>
-          <div>
-            <NavbarContent className="hidden sm:flex gap-4 justify-center" justify="center">
-            <NavbarBrand>
-              <p className="font-bold text-inherit">HMO</p>
-            </NavbarBrand>
-            <NavbarItem>
-              <Link color="foreground" href="#">
-                Blog
-              </Link>
-              
-            </NavbarItem>
-            <NavbarItem>
-              <Link href="#" aria-current="page" color="warning">
-                About Us
-              </Link>
-            </NavbarItem>
-            <NavbarItem>
-              <Link color="foreground" href="#">
-                Contact Us
-              </Link>
-            </NavbarItem>
-          </NavbarContent>
-          </div>
-    
-          
-    
-          <NavbarContent justify="end">
+  return (
+    <Navbar isBordered variant="sticky flex  flex-row lg:justify-between">
+      <NavbarContent className="sm:hidden" justify="start">
+        <NavbarMenuToggle />
+      </NavbarContent>
+
+      <NavbarContent className="sm:hidden pr-3 " justify="center">
+        <NavbarBrand>
+          <Link to="/" className="font-bold text-inherit cursor-pointer">
+            HMO
+          </Link>
+        </NavbarBrand>
+      </NavbarContent>
+      <div>
+        <NavbarContent
+          className="hidden sm:flex gap-4 justify-center"
+          justify="center"
+        >
+          <NavbarBrand>
+            <Link to="/" className="font-bold text-inherit cursor-pointer">
+              HMO
+            </Link>
+          </NavbarBrand>
+          <NavbarItem>
+            <Link color="foreground" href="/blog">
+              Blog
+            </Link>
+          </NavbarItem>
+          <NavbarItem>
+            <Link href="/about" aria-current="page" color="warning">
+              About Us
+            </Link>
+          </NavbarItem>
+          <NavbarItem>
+            <Link color="foreground" href="/contact">
+              Contact Us
+            </Link>
+          </NavbarItem>
+        </NavbarContent>
+      </div>
+
+      <NavbarContent justify="end">
+        {user ? (
+          <>
             <NavbarItem className="hidden lg:flex">
-              <Link href="#">Login</Link>
+              <Link href="/profile">Profile</Link>
+            </NavbarItem>
+            <NavbarItem className="hidden lg:flex">
+              <Link href="#" onClick={handleLogout}>Logout</Link>
+            </NavbarItem>
+          </>
+        ) : (
+          <>
+            <NavbarItem className="hidden lg:flex">
+              <Link href="/login">Login</Link>
             </NavbarItem>
             <NavbarItem>
-              <Button as={Link} color="warning" href="#" variant="flat">
+              <Button as={Link} color="warning" href="/register" variant="flat">
                 Sign Up
               </Button>
             </NavbarItem>
-          </NavbarContent>
-    
-          <NavbarMenu>
-            {menuItems.map((item, index) => (
-              <NavbarMenuItem key={`${item}-${index}`} className='flex justify-between mb-2 '>
-                <Link
-                  className="w-full"
-                  color={
-                    index === 2 ? "warning" : index === menuItems.length - 1 ? "danger" : "foreground"
-                  }
-                  href="#"
-                  size="lg"
-                >
-                  {item}
-                </Link>
-                <FiArrowRight size={16} />
-              </NavbarMenuItem>
-            ))}
-            <Divider />
-            <FollowUs />
-          </NavbarMenu>
-        </Navbar>
-      );
-}
+          </>
+        )}
+      </NavbarContent>
+
+      <NavbarMenu>
+        {menuItems.map((item, index) => (
+          <NavbarMenuItem
+            key={`${item}-${index}`}
+            className="flex justify-between mb-2 "
+          >
+            <Link
+              className="w-full"
+              color={
+                index === 2
+                  ? "warning"
+                  : index === menuItems.length - 1
+                  ? "danger"
+                  : "foreground"
+              }
+              href="#"
+              size="lg"
+            >
+              {item}
+            </Link>
+            <FiArrowRight size={16} />
+          </NavbarMenuItem>
+        ))}
+        <Divider />
+        <FollowUs />
+      </NavbarMenu>
+    </Navbar>
+  );
+};
 
 export default Navigationbar;

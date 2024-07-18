@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Textarea,
@@ -8,64 +9,45 @@ import {
   User,
   CardFooter,
 } from "@nextui-org/react";
-import React from "react";
 import { BsFillReplyAllFill } from "react-icons/bs";
 import { FiArrowRight } from "react-icons/fi";
+import { commentOnPost, getComments } from "../services/interactionService";
+import { useParams, useNavigate } from "react-router-dom";
 
-const CommentSection = () => {
-  const [value, setValue] = React.useState("1");
+const CommentSection = ({ user, comments, setComments }) => {
+  const [newComment, setNewComment] = useState("");
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  const handleChange = (value) => {
-    setValue(value);
+  const handleSubmitComment = async () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    if (newComment.length < 10) {
+      alert("The comment should be at least 10 characters long.");
+      return;
+    }
+
+    try {
+      const response = await commentOnPost(id, newComment);
+      setComments([...comments, response]);
+      setNewComment("");
+    } catch (error) {
+      console.error("Error submitting comment:", error);
+    }
   };
-
-  const handleReply = () => {
-    console.log("reply");
-  };
-
-  const handleSubmitCOmment = () => {
-    console.log("submit");
-  };
-
-  const comments = [
-    {
-      id: 1,
-      name: "John Doe",
-      date: "10/08/2024",
-      text: "This is a great article!",
-
-      replies: [
-        {
-          id: 2,
-          name: "Jane Doe",
-          date: "10/08/2024",
-          text: "I completely agree!",
-        },
-        {
-          id: 3,
-          name: "John Doesnaught",
-          date: "10/08/2024",
-          text: "Thanks for sharing!",
-        },
-      ],
-    },
-    {
-      id: 4,
-      name: "Admin",
-      date: "10/08/2024",
-      text: "I have a question about this topic...",
-    },
-  ];
 
   return (
     <>
       <div className="my-8 w-auto flex flex-col">
         <p className="text-xl font-bold mb-2">Comments</p>
         <Textarea
-          isInvalid={true}
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
           variant="bordered"
           placeholder="Enter your comment"
-          errorMessage="The comment should be at least 10 characters long."
         />
         <Button
           size="sm"
@@ -74,6 +56,7 @@ const CommentSection = () => {
           auto
           rounded
           shadow
+          onClick={handleSubmitComment}
         >
           Post Comment
         </Button>
@@ -98,7 +81,7 @@ const CommentSection = () => {
                       isIconOnly
                       color="secondary"
                       variant="subtle"
-                      onClick={handleReply}
+                      onClick={() => console.log("reply")}
                     >
                       <FiArrowRight size={12} />
                     </Button>
@@ -122,7 +105,7 @@ const CommentSection = () => {
                                 isIconOnly
                                 color="secondary"
                                 variant="subtle"
-                                onClick={handleReply}
+                                onClick={() => console.log("reply")}
                               >
                                 <FiArrowRight size={12} />
                               </Button>
@@ -136,7 +119,6 @@ const CommentSection = () => {
               </Card>
             </div>
           ))}
-          
         </div>
         <Divider />
       </div>
